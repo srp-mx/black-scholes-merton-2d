@@ -1,0 +1,70 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+
+Discretizando únicamente el espacio en la ecuación de calor, obtenemos el lado
+derecho de \ref{eq:ftcs0}, el cual se puede despejar a algo similar a
+\ref{eq:ftcs1} con $S_\mu=\frac{\alpha}{\Delta\mu^2}$ y donde
+$S_{xy}=-2S_x-2S_y$ ya que el $1$ provendría del lado izquierdo. Esto nos deja
+con el esquema de problema de valor inicial ($t=0$)
+\begin{equation}
+    \left.\deriv{\textrm{\textbf{u}}}{t}\right\rvert_{t=n\Delta t} = f_n = M'U^n
+\label{eq:lin-scheme1}
+\end{equation}
+
+Con $M'$ una matriz con diagonal principal $S_{xy}$, diagonal $1$ y $-1$
+como $S_x$ y diagonal $w$ y $-w$ como $S_y$, asumiendo que en $U$ vectorizamos
+la malla 2D como hicimos en la sección \ref{sec:crank-nicholson}. Separando los
+nodos interiores y de frontera obtenemos
+\begin{equation}
+    \underbrace{f_{n(I)}}_{\deriv{\textrm{\textbf{u}}}{t}} = \underbrace{M'_{(II)}}_{M}\underbrace{U_{(I)}^n}_{\textrm{\textbf{u}}^n} + \underbrace{M'_{(IF)}U_{(F)}^n}_{\textrm{\textbf{b}}}
+\label{eq:lin-scheme2}
+\end{equation}
+
+Como Euler explícito es $U^{n+1} = U^n + \Delta t f_n$, notemos que así nuestros
+$S_\mu$ en $f_n$ se multiplican por $\Delta t$, coincidiendo con $S_x$ y $S_y$
+en la ecuación \ref{eq:ftcs1}, y sumando el término $U^n$ se agrega en la $i$-ésima
+entrada $U_i^n$, por lo que ahora $S_{xy}$ también coincide pues podemos sumarle $1$
+para contabilizar la contribución de esta suma. Por lo tanto, el esquema resultante
+de aplicar Euler explícito es exactamente el mismo que el de la sección \ref{sec:ftcs}.
+
+Por otro lado, aplicando un esquema RK4, observando que $b$ es la única parte
+dependiente del tiempo, pues contiene los nodos de frontera, tenemos
+\begin{equation}
+    u^{n+1} = u^n + \frac{\Delta t}{6}\pp{\kappa_1 + 2\kappa_2 + 2\kappa_3 + \kappa_4}
+\label{eq:rk4-lin1}
+\end{equation}
+$$ \kappa_1 = Mu^n + b^n \hspace{2mm};\hspace{2mm}
+\kappa_2 = M\pp{u^n + \frac{\Delta t}{2}\kappa_1} + b^{n+\frac{1}{2}} $$
+$$ \kappa_3 = M\pp{u^n + \frac{\Delta t}{2}\kappa_2} + b^{n+\frac{1}{2}} \hspace{2mm};\hspace{2mm}
+\kappa_4 = M\pp{u^n + \Delta t \kappa_3} + b^{n+1} $$
+
+Notemos que como $M$ depende de $\Delta x$ y $\Delta y$, entonces la
+estabilidad de nuestro esquema y su \textit{stiffness} (rigidez) dependerá de
+la discretización espacial. Por el método de discos de Gershgorin, tenemos por
+cada fila un círculo con centro $c$ y radio $R$ tal que
+\begin{equation}
+    c = -2\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}
+    \hspace{2mm};\hspace{2mm}
+    R = 2\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}
+\label{eq:gersh-lin}
+\end{equation}
+
+Así $\lambda\in[-4\alpha\pp{\Delta x^{-2}+\Delta y^{-2}},0]$ eigenvalor de $M$
+cualquiera. Esto nos dice que los eigenvectores son negativos y
+$|\lambda_{\max{}}| \leq 4\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}$, lo que nos
+indica que mientras más fina sea la malla, mas rígido es el sistema. Como la
+estabilidad requiere $\Delta t \leq \frac{2}{|\lambda_{\max{}}|}$, entonces
+\begin{equation}
+    \Delta t \leq \frac{1}{2\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}}
+\label{eq:stiff-lin}
+\end{equation}
+
+Esto no nos da el radio de rigidez $|\lambda_{\max{}}|/|\lambda_{\min{}}|$,
+pero sí nos da idea de este comportamiento. En la ejecución de nuestro
+simulador daremos tal radio con el método de la potencia.
+
+\end{document}
+
+

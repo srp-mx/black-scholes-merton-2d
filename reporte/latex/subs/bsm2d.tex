@@ -1,0 +1,128 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+%% TODO: Revisar
+
+\begin{document}
+
+Aunque existen transformaciones a la ecuación de calor más sofisticados
+\parencite{bs-heat-transform}, y se puede tratar numéricamente la ecuación
+diferencial de manera más directa \parencite{bs-2d-korea}, optamos por
+discretizar una transformación más simple a la ecuación de calor para
+propósitos del experimento.
+
+Recordemos que, por su interpretación financiera y estadística,
+$$S_1,S_2 > 0 \hspace{4mm} \sigma_1,\sigma_2>0\hspace{4mm}\rho\in (-1,1)$$
+
+Aunque en principio $|\rho|$ puede ser $1$, no cubriremos este caso pues se
+reduce a la ecuación de calor 1D con un condicionamiento moderadamente
+complejo. Sólo nos interesa exhibir los métodos en 2D, por lo que no queremos
+duplicar esfuerzos al diseñar métodos 1D también.
+
+%% NOTE: Si rho se acerca a 1, el problema está mal condicionado. Notar eso en
+%% el análisis numérico
+
+Sea $\tau=T-t$ y a partir de ello definamos
+$$y_1 = \ln{S_1}+\pp{r-\sigma_1^2/2}(T-\tau) \hspace{4mm} y_2 = \ln{S_2}+\pp{r-\sigma_2^2/2}(T-\tau)$$
+$$U(y_1,y_2,\tau) = e^{r(T-\tau)}V(S_1,S_2,T-\tau)$$
+
+De esto,
+\begin{equation}
+S_1 = e^{y_1+\pp{\sigma_1^2/2 - r}(T-\tau)}
+\hspace{4mm}
+S_2 = e^{y_2+\pp{\sigma_2^2/2 - r}(T-\tau)}
+    \label{eq:s_from_y}
+\end{equation}
+
+Cambiando variables con la regla de la cadena en la ecuación \ref{eq:bsm2},
+\begin{equation}
+    U_\tau = \frac{\sigma_1^2}{2}U_{y_1y_1} + \frac{\sigma_2^2}{2}U_{y_2y_2} + \rho\sigma_1\sigma_2U_{y_1y_2}
+\label{eq:bsm_u}
+\end{equation}
+
+Buscamos eliminar el término con derivadas cruzadas. Notemos que si $\rho=0$ ya
+lo conseguimos. Por lo tanto procedamos bajo el supuesto que $\rho\neq 0$. Así
+el lado derecho de la ecuación \ref{eq:bsm_u} es la mitad de aplicar la
+forma cuadrática de la matriz $A$ siguiente a $U$
+\begin{equation}
+    \begin{pmatrix}
+        \partial_{y_1} & \partial_{y_2}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \sigma_1^2 & \rho\sigma_1\sigma_2 \\
+        \rho\sigma_1\sigma_2 & \sigma_2^2\\
+    \end{pmatrix}
+    \begin{pmatrix}
+        \partial_{y_1} \\
+        \partial_{y_2}
+    \end{pmatrix}
+\label{eq:qform_dparc}
+\end{equation}
+
+Para el cambio de coordenadas que permite lo que buscamos, queremos $L$ invertible
+tal que $LAL^T = I$. Así, si $\flecha{y}=(y_1,y_2)^T$ entonces definimos
+$\flecha{z} = L\flecha{y}$ y $u(\flecha{z},\tau)=U(\flecha{y},\tau)$, donde
+\begin{equation}
+    u_\tau = \frac{1}{2}\pp{u_{z_1z_1} + u_{z_2z_2}}
+\label{eq:calor_bsm2d}
+\end{equation}
+
+Si $\rho\neq 0$, un valor razonable para $L$ es dado por $A^{-1/2}$, lo cual se
+obtiene al descomponer a $A$ en matrices ortogonales y una diagonal usando sus
+valores y vectores propios. Para esta matriz particular,
+\begin{equation}
+    L = \frac{1}{\sqrt{\lambda_1}}v_1v_1^T + \frac{1}{\sqrt{\lambda_2}}v_2v_2^T
+\label{eq:l_decomp}
+\end{equation}
+
+Con
+$$
+\lambda_{1,2} = \frac{1}{2}\pp{\sigma_1^2 + \sigma_2^2 \pm \sqrt{(\sigma_1^2-\sigma_2^2)^2 + 4\rho^2\sigma_1^2\sigma_2^2}} 
+$$
+$$
+v_i = \frac{1}{\sqrt{(\rho\sigma_1\sigma_2)^2 + (\sigma_1^2-\lambda_i)^2}}
+\begin{pmatrix}
+    -\rho\sigma_1\sigma_2 \\
+    \sigma_1^2 - \lambda_i
+\end{pmatrix}
+$$
+
+Por el otro lado si $\rho=0$, entonces $z_i=y_i/\sigma_i$ y tenemos la misma
+ecuación de calor. Por consistencia asignamos
+$L=\textrm{diag}(\sigma_1^{-1},\sigma_2^{-1})$.
+
+Evidentemente, sustituyendo todo, recuperamos $V$ como
+\begin{equation}
+V(S_1,S_2,t) = e^{-rt}u\pp{L\pp{\ln{S_i}+(r-\sigma_i^2/2)t},T-t}
+\label{eq:u_to_V}
+\end{equation}
+
+Así, las condiciones iniciales y de frontera en el espacio de la ecuación de
+calor ($z$) es
+\begin{equation}
+    u(\flecha{z},0) = \max\cjto{e^{rT}\varphi_K(S_1(\flecha{z},0),S_2(\flecha{z},0)),0}
+\label{eq:final2_calor}
+\end{equation}
+\begin{equation}
+    \lim_{(L^{-1}\flecha{z})_2\to-\infty}u(\flecha{z},\tau) = e^{r(T-\tau)}\varphi_K(S_1(\flecha{z},\tau), 0)
+\label{eq:frontera2_calor2}
+\end{equation}
+\begin{equation}
+    \lim_{(L^{-1}\flecha{z})_1\to-\infty}u(\flecha{z},\tau) = e^{r(T-\tau)}\varphi_K(0, S_2(\flecha{z},\tau))
+\label{eq:frontera2_calor1}
+\end{equation}
+\begin{equation}
+    \lim_{S_1(\flecha{z},\tau)+S_2(\flecha{z},\tau)\to\infty} u(\flecha{z},\tau)
+    = e^{r(T-\tau)}\frac{\varphi_K(S_1(\flecha{z},\tau),S_2(\flecha{z},\tau))}{S_1(\flecha{z},\tau)+S_2(\flecha{z},\tau)}
+\label{eq:frontera_calor3}
+\end{equation}
+
+De la ecuación \ref{eq:s_from_y}, usamos en las ecuaciones anteriores lo
+siguiente
+\begin{equation}
+S_i(\flecha{z}, \tau) = e^{L^{-1}z_i + (\sigma_i^2/2-r)(T-\tau)}
+\label{eq:z_to_s}
+\end{equation}
+
+\end{document}
+

@@ -1,0 +1,33 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+
+\PARstart{L}a ecuación de Black-Scholes-Merton (BSM) \parencite{bsm73} es uno
+de los modelos más influyentes en su ámbito \parencite{bs-approach}
+\parencite{bs-formula}, siendo ampliamente usada como un punto de
+partida para métodos modernos de valuación de títulos opcionales sobre acciones
+en el mercado bursátil, el cual es un problema central de las finanzas
+cuantitativas. \parencite[20-21]{tesis-bsm}
+
+Es bien conocido, incluso utilizado en la publicación original de Black y
+Scholes, que la ecuación BSM se puede reducir en la ecuación de calor en una
+dimensión espacial y una temporal \parencite{bsm73}
+\parencite{bs-heat-transform}, lo cual la amena a tratamientos analíticos y
+numéricos efectivos. \parencite{bs-lecture-notes} \parencite{bs-heat-transform}
+
+Mientras que la ecuación BSM en una dimensión nos da el valor de una opción
+sobre una acción al estilo europeo de un activo \parencite{bsm73}
+\parencite{bs-presentation} \parencite{bs-lecture-notes}, existen opciones
+multi-activo que no subyacen su valor en un único activo, como es el caso de
+canastas de mercancías, opciones para dos acciones, o contratos que involucran
+múltiples tipos de cambio. \parencite{unam-bsm2d}
+
+Este reporte se enfoca en comparar métodos numéricos para resolver la ecuación
+BSM en dos activos subyacentes, mediante su reducción a la ecuación de calor en
+dos dimensiones espaciales y una temporal, haciendo énfasis en la precisión,
+la estabilidad numérica y el tiempo de cómputo de los esquemas numéricos
+implementados en GPGPU.
+
+\end{document}
+

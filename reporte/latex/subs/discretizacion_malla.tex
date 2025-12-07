@@ -1,0 +1,31 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+
+Trabajamos en $z$\textit{-coordenadas} con tiempo $\tau$, sobre las cuales
+resolveremos numéricamente la ecuación de calor para obtener un estimado de
+$u(z_1,z_2,\tau)$.
+
+El desafío de la discretización de la malla yace en la aplicación de las
+condiciones de frontera, pues por un lado ahora estas ocurren en los límites
+mientras cada $z_i\to\pm\infty$, y por el otro lado dependen de las coordenadas
+$S_i$ y $y_i$, las cuales no necesariamente están alineadas a los ejes en
+$z$-coordenadas.
+
+Para resolver estos problemas, proponemos dar un dominio cuadrado grande, que
+se escale con respecto a la máxima desviación estándar (i.e.
+$\sigma_1,\sigma_2$) y el valor máximo de $\sqrt{\tau}$, en el cual pretendemos
+que donde sea que se encuentren los nodos externos se les asignará la condición
+de frontera de Dirichlet correspondiente a su orientación hacia el infinito y
+si $S_1+S_2$ excede un umbral relativo al máximo valor de $S_1+S_2$. Mientras
+más amplio sea el dominio, entonces será mejor la aproximación.
+
+Esta decisión nos inducirá sesgo en nuestro modelo, pues no debería en estos
+puntos de la frontera mantenerse siempre el mismo valor por más que sea muy
+grande y en un inicio se aproxime bien el valor en el límite. Quedará por
+verse cómo se compara con algún $\varphi_K$ para el cual se conozca alguna
+solución exacta.
+
+\end{document}
+

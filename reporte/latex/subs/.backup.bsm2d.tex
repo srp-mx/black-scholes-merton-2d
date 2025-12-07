@@ -1,0 +1,282 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+%% TODO
+
+\begin{document}
+
+Sean
+$$x_1 = \ln{S_1} \hspace{4mm} x_2 = \ln{S_2} \hspace{4mm} \tau = T - t$$
+$$U(x_1,x_2,\tau) = V(S_1,S_2,t)$$
+
+Por la regla de la cadena tenemos
+\begin{multline}
+    -\dparc{U}{\tau} + \frac{1}{2}\sigma_1^2\dparc{^2U}{x_1^2} + \frac{1}{2}\sigma_2^2\dparc{^2U}{x_2^2} + \rho\sigma_1\sigma_2\dparc{^2U}{x_1\partial x_2}\\
+    + \pp{r-\frac{1}{2}\sigma_1^2}\dparc{U}{x_1} + \pp{r-\frac{1}{2}\sigma_2^2}\dparc{U}{x_2} - rU = 0
+\label{eq:bsm2d_t1}
+\end{multline}
+
+Sea $W(x_1,x_2,\tau)=e^{r\tau}U(x_1,x_2,\tau)$, de donde $W_\tau = re^{r\tau}U
++ e^{r\tau}U_\tau$ y así sustituyendo $U_\tau$ despejado de lo anterior,
+\begin{multline}
+    -\dparc{W}{\tau} + \frac{1}{2}\sigma_1^2\dparc{^2W}{x_1^2} + \frac{1}{2}\sigma_2^2\dparc{^2W}{x_2^2} + \rho\sigma_1\sigma_2\dparc{^2W}{x_1\partial x_2}\\
+    + \pp{r-\frac{1}{2}\sigma_1^2}\dparc{W}{x_1} + \pp{r-\frac{1}{2}\sigma_2^2}\dparc{W}{x_2} = 0
+\label{eq:bsm2d_t2}
+\end{multline}
+
+Supongamos $a_1,a_2\in\mathbb{R}$ constantes. Definamos
+$$Y(x_1,x_2,\tau) = e^{-a_1x_1-a_2x_2}W(x_1,x_2,\tau) = e^{-\flecha{a}\cdot \flecha{x}}W$$
+
+Observemos que
+\begin{equation}
+    \dparc{Y}{x_i}e^{\flecha{a}\cdot \flecha{x}} = \dparc{W}{x_i}-a_iW
+\label{eq:y_xi}
+\end{equation}
+\begin{equation}
+    \dparc{^2Y}{x_i^2}e^{\flecha{a}\cdot\flecha{x}} = \dparc{^2W}{x_i^2}-2a_i\dparc{W}{x_i} + a_i^2W
+\label{eq:y_xi2}
+\end{equation}
+\begin{equation}
+    \dparc{^2Y}{x_1\partial x_2}e^{\flecha{a}\cdot\flecha{x}} = \dparc{^2W}{x_1\partial x_2} - a_1\dparc{W}{x_2} - a_2\dparc{W}{x_1} + a_1a_2W
+\label{eq:y_x1x2}
+\end{equation}
+\begin{equation}
+    \dparc{Y}{\tau}e^{\flecha{a}\cdot\flecha{x}} = \dparc{W}{\tau}
+\label{eq:y_tau}
+\end{equation}
+
+Notemos que tras sustituir, los coeficientes de las primeras derivadas desaparecen
+si escogemos $\flecha{a}$ tal que
+\begin{equation}
+    \begin{pmatrix}
+        \sigma_1^2 & \rho\sigma_1\sigma_2 \\[1.5ex]
+        \rho\sigma_1\sigma_2 & \sigma_2^2
+    \end{pmatrix}\flecha{a}
+    =
+    \begin{pmatrix}
+        r-\frac{1}{2}\sigma_1^2 \\[1.5ex]
+        r-\frac{1}{2}\sigma_2^2
+    \end{pmatrix}
+\label{eq:desp_a}
+\end{equation}
+
+De donde
+\begin{equation}
+    \flecha{a}
+    =
+    \frac{1}{\sigma_1^2\sigma_2^2\pp{1-\rho^2}}
+    \begin{pmatrix}
+        \sigma_2^2 & -\rho\sigma_1\sigma_2 \\[1.5ex]
+        -\rho\sigma_1\sigma_2 & \sigma_1^2
+    \end{pmatrix}
+    \begin{pmatrix}
+        r-\frac{1}{2}\sigma_1^2 \\[1.5ex]
+        r-\frac{1}{2}\sigma_2^2
+    \end{pmatrix}
+\label{eq:desp_a_fin}
+\end{equation}
+
+Esto nos da ahora a nuestra ecuación diferencial como
+\begin{equation}
+    -\dparc{Y}{\tau} + \frac{1}{2}\sigma_1^2\dparc{^2Y}{x_1^2} + \frac{1}{2}\sigma_2^2\dparc{^2Y}{x_2^2} + \rho\sigma_1\sigma_2\dparc{^2Y}{x_1\partial x_2} + \lambda Y = 0
+\label{eq:edp_y}
+\end{equation}
+con $\lambda = \sigma_1^2a_1^2/2 + \sigma_2^2a_2^2/2 + \rho\sigma_1\sigma_2a_1a_2 - (r-\sigma_1^2/2)a_1 - (r-\sigma_2^2/2)a_2$,
+el cual podemos reducir con $Z(x_1,x_2,\tau)=e^{-\lambda\tau}Y(x_1,x_2,\tau)$:
+\begin{equation}
+    -\dparc{Z}{\tau} + \frac{1}{2}\sigma_1^2\dparc{^2Z}{x_1^2} + \frac{1}{2}\sigma_2^2\dparc{^2Z}{x_2^2} + \rho\sigma_1\sigma_2\dparc{^2Z}{x_1\partial x_2} = 0
+\label{eq:edp_z}
+\end{equation}
+
+Podemos hacer un cambio de coordenadas para eliminar el término mixto. Notemos
+que dada la matriz
+$$
+A = \frac{1}{2}
+    \begin{pmatrix}
+        \sigma_1^2 & \rho\sigma_1\sigma_2 \\[1.5ex]
+        \rho\sigma_1\sigma_2 & \sigma_2^2
+    \end{pmatrix}
+$$
+
+Entonces su forma cuadrática en los operadores de derivada parcial con respecto
+a $x_1$ y $x_2$ es:
+\begin{multline}
+    \begin{pmatrix}
+        \partial_{x_1} & \partial_{x_2}
+    \end{pmatrix}
+    A
+    \begin{pmatrix}
+        \partial_{x_1} \\
+        \partial_{x_2}
+    \end{pmatrix}Z \\
+    =
+\frac{1}{2}\sigma_1^2\dparc{^2Z}{x_1^2} + \frac{1}{2}\sigma_2^2\dparc{^2Z}{x_2^2} + \rho\sigma_1\sigma_2\dparc{^2Z}{x_1\partial x_2}
+\label{eq:qform_z}
+\end{multline}
+
+Así, podemos diagonalizar $A$ para obtener las coordenadas que nos eliminan el
+término mixto al ser ortogonal. Sea $Q$ tal que $QAQ^T = \textrm{diag}(\mu_1,
+\mu_2)$ con $\mu_1\neq \mu_2$. Así
+$\flecha{y}=Q\flecha{x}$. De esto,
+\begin{equation}
+    -\dparc{Z}{\tau} + \mu_1\dparc{^2Z}{y_1^2} + \mu_2\dparc{^2Z}{y_2^2} = 0
+\label{eq:edp_zy}
+\end{equation}
+
+Como caso especial para evitar degeneraciones, si $\rho=0$, entonces tomaremos
+$\flecha{x}=\flecha{y}$, $\mu_1=\sigma_1^2/2$ y $\mu_2=\sigma_2^2/2$ pues ya
+está en la forma que queremos, sin importar si $\mu_1=\mu_2$.
+
+Finalmente, reescalamos las coordenadas para no tener coeficientes. Con
+$\xi_1 = y_1/\sqrt{2\mu_1}$ y $\xi_2 = y_2/\sqrt{2\mu_2}$ obtenemos
+\begin{equation}
+    \dparc{Z}{\tau} = \dparc{^2Z}{\xi_1^2} + \dparc{^2Z}{\xi_2^2}
+\label{eq:calor_bsm}
+\end{equation}
+
+Recuperando el valor de la opción por sustituciones,
+\begin{equation}
+    V(S_1,S_2,t) = e^{(\lambda-r)(T-t) + \flecha{a}\cdot\pp{\ln{S_1},\ln{S_2}}}Z(\xi_1,\xi_2,T-t)
+\label{eq:calor_bsm_inv}
+\end{equation}
+recordando los valores de $\lambda$, $\flecha{a}$ y $\xi_i$, los cuales
+provienen de transformaciones simples a la solución de sistemas lineales
+$2\times 2$.
+
+Si $E_{Mi}$ denota al $i$-ésimo eigenvalor de $M$, $\flecha{E}_{Mi}$ el
+$i$-ésimo eigenvector de $M$ y $\alpha = e^{(\lambda-r)(T-t) +
+\flecha{a}\cdot\pp{\ln{S_1},\ln{S_2}}}$, tenemos
+\begin{equation}
+    V(S_1,S_2,t) =
+    \alpha Z\pp{
+        \frac{\flecha{E}_{A1}^T}{\sqrt{2E_{A1}}}
+        \begin{pmatrix}
+            \ln{S_1} \\
+            \ln{S_2}
+        \end{pmatrix}
+    ,\frac{\flecha{E}_{A2}^T}{\sqrt{2E_{A2}}}
+        \begin{pmatrix}
+            \ln{S_1} \\
+            \ln{S_2}
+        \end{pmatrix}
+    ,T-t}
+\label{eq:calor_bsm_inv2}
+\end{equation}
+
+Resolviendo directamente los eigenvalores y eigenvectores de $A$, tenemos
+\begin{equation}
+ E_{A1} = \frac{1}{2}\pp{\sigma_1^2 + \sigma_2^2 - \sqrt{(\sigma_1^2 - \sigma_2^2)^2 + 4\rho^2\sigma_1^2\sigma_2^2}}
+\label{eq:eigval_a1}
+\end{equation}
+\begin{equation}
+ E_{A2} = \frac{1}{2}\pp{\sigma_1^2 + \sigma_2^2 + \sqrt{(\sigma_1^2 - \sigma_2^2)^2 + 4\rho^2\sigma_1^2\sigma_2^2}}
+\label{eq:eigval_a2}
+\end{equation}
+\begin{equation}
+ \flecha{E}_{A1}^T = \begin{pmatrix} 1 & -\frac{\sigma_1^2-E_{A1}}{\rho\sigma_1\sigma_2} \end{pmatrix}
+     \hspace{4mm}
+ \flecha{E}_{A2}^T = \begin{pmatrix} 1 & -\frac{\sigma_1^2-E_{A2}}{\rho\sigma_1\sigma_2} \end{pmatrix}
+\label{eq:eigvec_a1a2}
+\end{equation}
+
+Como $-1 \leq \rho \leq 1$ por ser correlación, los eigenvalores serán todos
+reales no-negativos, por lo que $A$ es semidefinido positivo. Notemos que
+$E_{A1} = E_{A2} \iff \rho^2=1$, lo cual es un caso degenerado.
+
+Así, la transformación de $S_i$ hacia $\xi_i$ en $0<|\rho|<1$ es
+\begin{equation}
+    \begin{pmatrix}
+        \xi_1 \\
+        \xi_2
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \frac{1}{\sqrt{2E_{A1}}} & \frac{E_{A1} - \sigma_1^2}{\rho\sigma_1\sigma_2\sqrt{2E_{A1}}} \\
+        \frac{1}{\sqrt{2E_{A2}}} & \frac{E_{A2}-\sigma_1^2}{\rho\sigma_1\sigma_2\sqrt{2E_{A2}}}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \ln{S_1} \\[1ex]
+        \ln{S_2}
+    \end{pmatrix}
+\label{eq:s_to_xi_neq0}
+\end{equation}
+
+Y por otro lado si $\rho = 0$, notando que en finanzas $\sigma_i > 0$,
+\begin{equation}
+    \begin{pmatrix}
+        \xi_1 \\
+        \xi_2
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \sigma_1^{-1}\ln{S_1} \\[1ex]
+        \sigma_2^{-1}\ln{S_2}
+    \end{pmatrix}
+\label{eq:s_to_xi_eq0}
+\end{equation}
+
+Así, si $0<|\rho|<1$, $\textrm{exp}[\flecha{v}] = (e^{v_1},
+e^{v_2})^T$ y $\nu=\rho\sigma_1\sigma_2$, invirtiendo
+\begin{equation}
+    \begin{pmatrix}
+        S_1 \\
+        S_2
+    \end{pmatrix}
+    =
+    \textrm{exp}\ppsq{
+        \frac{2\nu\sqrt{E_{A1}E_{A2}}}{E_{A2}-E_{A1}}
+        \begin{pmatrix}
+            \frac{E_{A2}-\sigma_1^2}{\nu\sqrt{2E_{A2}}} & \frac{\sigma_1^2-E_{A1}}{\nu\sqrt{2E_{A1}}} \\
+            -\frac{1}{\sqrt{2E_{A2}}} & \frac{1}{\sqrt{2E_{A1}}}
+        \end{pmatrix}
+        \begin{pmatrix}
+            \xi_1 \\[1ex]
+            \xi_2
+        \end{pmatrix}
+    }
+\label{eq:xi_to_s_neq0}
+\end{equation}
+
+Y si $\rho = 0$,
+\begin{equation}
+    \begin{pmatrix}
+        S_1 \\
+        S_2
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        e^{\sigma_1\xi_1} \\
+        e^{\sigma_2\xi_2}
+    \end{pmatrix}
+\label{eq:xi_to_s_eq0}
+\end{equation}
+
+%% TODO: Revisar si esto no es del todo correcto
+Finalmente queda por considerar el caso $|\rho|=1$, pero notemos que de ser
+este el caso entonces el valor de ambos activos es linealmente dependiente por
+tener correlación con magnitud 1, por lo que el problema se puede reducir a la
+ecuación del calor 1D en la dirección del único eigenvector sin despreciar la
+dependencia de función de pago en ambas coordenadas originales. No
+contemplaremos este caso por simplicidad.
+
+%% TODO: Revisa condiciones de frontera, no son realmente correctas
+Trazando las sustituciones a las condiciones del sistema, tenemos
+\begin{equation}
+    \lim_{\xi_1\to -\infty} Z(\xi_1,\xi_2,\tau) = \varphi_K(0, S_2)
+\label{eq:fronteraz_call1}
+\end{equation}
+\begin{equation}
+    \lim_{\xi_2 \to -\infty} Z(\xi_1,\xi_2,\tau) = \varphi_K(S_1, 0)
+\label{eq:fronteraz_call2}
+\end{equation}
+\begin{equation}
+    \lim_{\xi_1+\xi_2\to\infty} Z(\xi_1,\xi_2,\tau) = \frac{\varphi_K(S_1,S_2)}{S_1+S_2}
+\label{eq:fronteraz_call3}
+\end{equation}
+\begin{equation}
+    Z(\xi_1,\xi_2,0) = \max\cjto{\varphi_K(S_1,S_2),0}
+\label{eq:finalz_call}
+\end{equation}
+
+\end{document}
+

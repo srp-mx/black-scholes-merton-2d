@@ -1,0 +1,75 @@
+\documentclass[9pt,conference,letterpaper]{IEEEtran}
+\usepackage{util/estilo}
+
+% Title and authors
+\title{
+    \rule{\linewidth}{2pt}
+    \Title{Soluciones Numéricas a la Ecuación de Calor Aplicadas a la Ecuación
+    de Black-Scholes-Merton 2D en CUDA Python} \\[-1ex]
+    \rule{\linewidth}{2pt}
+}
+
+\author{
+    \IEEEauthorblockN{Santiago Romero}
+    \IEEEauthorblockA{Estudiante de Ciencias de la Computación\\
+    Facultad de Ciencias UNAM, Ciudad de México\\
+    \email{santiago.rp@ciencias.unam.mx}}
+}
+
+% Document starts
+\begin{document}
+
+\maketitle
+
+\thispagestyle{plain}
+\pagestyle{plain}
+
+\begin{abstract}
+    %% TODO
+\end{abstract}
+
+\begin{IEEEkeywords}
+    %% TODO
+\end{IEEEkeywords}
+
+\section{Introducción}\label{sec:intro}
+\subfile{subs/introduccion.tex}
+
+\section{Preliminares}\label{sec:preliminares}
+\subfile{subs/preliminares.tex}
+
+\section{Planteamiento Matemático y Numérico} \label{sec:planteamiento}
+
+\subsection{BSM Como Ecuación de Calor 2D}
+\subfile{subs/bsm2d.tex}
+
+\subsection{Métodos Numéricos}
+
+\subsubsection{Discretización de la malla}\label{sec:malla}
+\subfile{subs/discretizacion_malla.tex}
+\vspace*{1em}
+
+\subsubsection{Esquema Forward-Time Central-Space (FTCS)}\label{sec:ftcs}
+\subfile{subs/ftcs.tex}
+\vspace*{1em}
+
+\subsubsection{Esquema Crank-Nicholson}\label{sec:crank-nicholson}
+\subfile{subs/crank-nicholson.tex}
+\vspace*{1em}
+
+\subsubsection{Esquema de Método de Líneas}\label{sec:metodo-lineas}
+\subfile{subs/metodo-lineas.tex}
+
+\section{Metodología}\label{sec:metodologia}
+
+\subsection{Implementación}
+
+\section{Resultados y Discusión}\label{sec:resultados}
+\subfile{subs/resultados.tex}
+
+\section{Conclusión}
+\subfile{subs/conclusion.tex}\label{sec:conclusion}
+
+\printbibliography
+
+\end{document}

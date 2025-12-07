@@ -1,0 +1,102 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+
+Una opción sobre una acción (o simplemente \textit{opción})
+\parencite{optionsBasics} \parencite[10-11]{tesis-bsm} es un contrato que
+permite a quien lo posee, pero no lo obliga, a comprar (\textit{opción de
+compra}) o vender (\textit{opción de venta}) más adelante una acción a un
+precio acordado (\textit{precio de ejercicio} \parencite[12]{tesis-bsm}), con
+una fecha límite de expiración (o de vencimiento) \parencite[12]{tesis-bsm}.
+
+Lógicamente si en un futuro la acción vale más, entonces el comprador sale
+beneficiado pues la puede adquirir a un precio menor al valor en el mercado.
+Por el contrario si la acción vale menos, entonces la opción es inútil pues el
+comprador puede simplemente comprarla a su valor actual en el mercado, o bien,
+puede no comprarla. \parencite[11]{tesis-bsm}
+
+Una opción sobre una acción puede ser de \textit{estilo europeo} o
+\textit{americano}. En el estilo americano la opción puede ser ejercida en
+cualquier momento hasta la fecha de expiración, mientras que en el estilo
+europeo la opción, de ser ejercida, debe serlo exactamente en la fecha de
+expiración. \parencite[10-13]{tesis-bsm} \parencite{investopedia-options}
+
+Llamamos un \textit{activo subyacente} (o simplemente \textit{activo}) al
+instrumento financiero en el cual un \textit{derivado} se basa. Una opción
+sobre una acción es un derivado cuyo activo subyacente es la acción misma, y la
+acción representa una fracción de propiedad sobre una empresa.
+\parencite[13]{tesis-bsm} \parencite{optionsBasics}
+\footnote{\textit{underlying security}}
+
+Según \parencite{bsm73}, el valor de una opción europea sin costos de
+transacción sobre un único activo, bajo el modelo de Black-Scholes-Merton
+(BSM), es dado por la ecuación diferencial parcial de segundo orden:
+\begin{equation}
+    \dparc{V}{t} + \frac{1}{2}\sigma^2S^2\dparc{^2V}{S^2} + rS\dparc{V}{S} - rV = 0
+    \hspace{2mm} ; \hspace{2mm}
+    0 \leq t \leq T
+\label{eq:bsm1}
+\end{equation}
+donde $V(S,t)$ es el valor de la opción con precio del activo $S=S(t)$ en
+tiempo $t$ en años, $T$ el tiempo de expiración, $r$ es la tasa de interés
+compuesto continuamente sin riesgo anualizada, $\sigma$ es la desviación
+estándar del rendimiento de la acción anualizado (el promedio de su rendimiento
+anual) y se asume que el riesgo financiero de la opción es nulo,
+usualmente mediante una estrategia de \textit{cobertura dinámica}.
+\parencite{bsm73} \parencite{bs-formula} \parencite[20-21]{tesis-bsm}
+
+Para plantear bien el problema, es necesario condicionar la EDP, lo cual se
+hace al decidir si nuestra opción es de compra o de venta. \parencite{bsm73}
+Empíricamente, el modelo BSM no es tan adecuado para opciones de venta, pero sí
+(bajo reservaciones) para opciones de compra. \parencite{bs-puts-calls}
+\parencite{bs-formula} Por lo tanto, nos centraremos en el valor de las
+opciones de compra, el cual se expresa en términos de un valor final y valores
+en la frontera, donde $V=C$ y $K$ es el precio de ejercicio:
+\begin{equation}
+    C(0,t) = 0
+\label{eq:frontera_call1}
+\end{equation}
+\begin{equation}
+    \lim_{S\to\infty} C(S,t) = S - K
+\label{eq:frontera_call2}
+\end{equation}
+\begin{equation}
+    C(S,T) = \max\cjto{S-K,0}
+\label{eq:final_call}
+\end{equation}
+
+Si $\rho$ es el coeficiente de correlación entre ambos activos, entonces la
+ecuación BSM para dos activos, asumiendo cero dividendos como en
+\parencite{bsm73}, se puede reducir de la ecuación 1 de \parencite{unam-bsm2d}
+en:
+\begin{multline}
+    \dparc{V}{t} + rS_1\dparc{V}{S_1} + rS_2\dparc{V}{S_2} + \frac{1}{2}\sigma_1^2S_1^2\dparc{^2V}{S^2_1} + \frac{1}{2}\sigma_2^2S_2^2\dparc{^2V}{S^2_2} \\
+    + \rho \sigma_1 \sigma_2 S_1 S_2 \dparc{^2V}{S_1\partial S_2} - rV = 0
+\label{eq:bsm2}
+\end{multline}
+
+Para las condiciones de frontera y finales, si $\varphi_K(S_1,S_2)$ es la
+manera en que se valúa el precio conjunto de ambos activos, i.e. la función de
+pago asociada a la opción (ya considerando el precio de ejercicio), entonces
+\begin{equation}
+    C(0,S_2,t) = \varphi_K(0, S_2)
+\label{eq:frontera2_call1}
+\end{equation}
+\begin{equation}
+    C(S_1,0,t) = \varphi_K(S_1, 0)
+\label{eq:frontera2_call2}
+\end{equation}
+\begin{equation}
+    \lim_{S_1+S_2\to\infty} C(S_1,S_2,t) = \frac{\varphi_K(S_1,S_2)}{S_1+S_2}
+\label{eq:frontera2_call3}
+\end{equation}
+\begin{equation}
+    C(S_1,S_2,T) = \max\cjto{\varphi_K(S_1,S_2),0}
+\label{eq:final2_call}
+\end{equation}
+% TODO: Revisa si la condición final hace sentido, no se si más bien debería
+% ser algo así como lim_{S_1->inf} C(S_1,S_2,t) = C(S_2,t), etc. 
+
+\end{document}
+

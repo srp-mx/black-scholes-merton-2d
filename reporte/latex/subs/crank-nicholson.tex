@@ -1,0 +1,112 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+El método de Crank-Nicholson consiste en promediar la diferencia espacial hacia
+adelante y hacia atrás. Esto nos da el esquema siguiente.
+\begin{multline}
+    \frac{U_{i,j}^{n+1}-U_{i,j}^n}{\Delta t} = \frac{\alpha}{2}\big(\\
+        \frac{U_{i+1,j}^n - 2U_{i,j}^n + U_{i-1,j}^n}{\Delta x^2} +
+        \frac{U_{i+1,j}^{n+1} - 2U_{i,j}^{n+1} + U_{i-1,j}^{n+1}}{\Delta x^2} +\\
+        \frac{U_{i,j+1}^n - 2U_{i,j}^n + U_{i,j-1}^n}{\Delta y^2} +
+        \frac{U_{i,j+1}^{n+1} - 2U_{i,j}^{n+1} + U_{i,j-1}^{n+1}}{\Delta y^2}
+    \big)
+\label{eq:crank-nicholson1}
+\end{multline}
+
+Dejando de un lado los valores que son en el siguiente paso temporal, para plantear
+un sistema lineal, y si $S_\mu = \alpha\Delta t/\Delta \mu^2$, entonces:
+\begin{multline}
+    2(1+S_x+S_y)U_{i,j}^{n+1}-S_x(U_{i+1,j}^{n+1}+U_{i-1,j}^{n+1}) - S_y(U_{i,j+1}^{n+1}+U_{i,j-1}^{n+1})\\
+    = 2(1-S_x-S_y)U_{i,j}^{n}+S_x(U_{i+1,j}^{n}+U_{i-1,j}^{n}) + S_y(U_{i,j+1}^{n}+U_{i,j-1}^{n})
+\label{eq:crank-nicholson2}
+\end{multline}
+
+Vectoricemos nuestra discretización del espacio. Si hay $w$ nodos en el eje
+$x$, y las entradas de nuestro vector sigue el orden \textit{row-major}, es
+decir en sentido de lectura, entonces $U_{x,y}^n = V_{x+wy}^n$. Así, obteniendo
+$M_1$ y $M_2$ en la reescritura de \ref{eq:crank-nicholson2} como $M_1V^{n+1} =
+M_2V^n$.
+
+La matriz $M_1$ es una matriz \textit{stencil} que sobre la diagonal principal
+tiene $2(1+S_x+S_y)$, en las dos diagonales que la rodean tiene $-S_x$ y $w$
+entradas a la izquierda y derecha (si no se salen de la matriz) tiene $-S_y$.
+Análogamente definimos a la matriz $M_2$ con la diagonal principal
+$2(1-S_x-S_y)$, sus dos vecinas como $S_x$ y dos a distancia $w$ con $S_y$.
+
+Reordenemos nuestro sistema lineal de modo que únicamente estemos actualizando
+y conservando los nodos internos mediante intercambios de filas y columnas, de
+modo que si $I$ se refiere a los nodos interiores y $F$ los de la frontera:
+$$
+W^n =
+\begin{pmatrix}
+    V_{(I)}^n\\
+    V_{(F)}^n
+\end{pmatrix}
+$$
+$$
+M_1' =
+\begin{pmatrix}
+    M_{1(II)} & M_{1(IF)} \\
+    M_{1(FI)} & M_{1(FF)}
+\end{pmatrix}
+\hspace{2ex}
+M_2' =
+\begin{pmatrix}
+    M_{2(II)} & M_{2(IF)} \\
+    M_{2(FI)} & M_{2(FF)}
+\end{pmatrix}
+$$
+
+Expandiendo $M_1'W^{n+1} = M_2'W^n$ y fijándonos en la actualización interna,
+tenemos nuestro esquema final de Crank-Nicholson en forma $A\textrm{\textbf{u}}^{n+1}=\textrm{\textbf{d}}^n$:
+\begin{equation}
+    \underbrace{M_{1(II)}}_{A}\underbrace{V_{(I)}^{n+1}}_{\textrm{\textbf{u}}^{n+1}} = \underbrace{M_{2(II)}V_{I}^n + M_{2(IF)}V_{(F)}^n - M_{1(IF)}V_{(F)}^{n+1}}_{\textrm{\textbf{d}}^n}
+\label{eq:esquema-cn}
+\end{equation}
+
+Es evidente que $M_1$ es simétrica. Como un reordenamiento de filas y columnas
+válido puede verse como aplicar una permutación simétrica. Bajo estas
+transformaciones se preserva simetría, por lo que $M'_1$ es simétrica. Como
+$M_{1(II)}=A$ es un bloque sobre la diagonal principal de $M'_1$, entonces $A$
+es simétrica.
+
+Análogamente, es evidente que $M_1$ es (estrictamente) diagonal dominante, pues
+cada entrada en su diagonal tiene norma $2(1+S_x+S_y)$ y el resto de elementos
+por renglón suma norma a lo más $2S_x + 2S_y$. Como $M'_1$ es permutación
+simétrica, sigue siendo diagonal dominante. Asímismo, $M_{1(II)}$ es bloque
+sobre la diagonal principal de $M'_1$ y por tanto es también estrictamente
+diagonal dominante.
+
+De $v^TM_{1(II)}v$ es evidente que $A=M_{1(II)}$ es definida positiva:
+\begin{equation}
+    v^TAv = 2\norm{v}_2^2 + S_x\sum_i\pp{v_{i+1}-v_i}^2 + S_y\sum_i\pp{v_{i+w}-v_i}^2
+\label{eq:qform-m1ii}
+\end{equation}
+
+Finalmente, nuestro esquema es convergente si la matriz de iteración
+$T=M_{1(II)}^{-1}M_{2(II)}$ tiene radio espectral menor a $1$. Si $v$ es vector
+propio de $T$, entonces tenemos que
+$M_{1(II)}^{-1}M_{2(II)} v = \lambda v$ y así $M_{2(II)}v = \lambda
+M_{1(II)}v$. Despejando $\lambda$ de aplicar $v^T$ por la izquierda:
+\begin{equation}
+    \lambda = \frac{v^TM_{2(II)}v}{v^TM_{1(II)}v}
+    = \frac{2\norm{v}_2^2 - S_x\sum_i\pp{v_{i+1}-v_{i}}^2 - S_y\sum_i\pp{v_{i+w}-v_{i}}^2}
+           {2\norm{v}_2^2 + S_x\sum_i\pp{v_{i+1}-v_{i}}^2 + S_y\sum_i\pp{v_{i+w}-v_{i}}^2}
+\label{eq:eig-qf-t}
+\end{equation}
+
+Notemos que el numerador es a lo más el denominador, por lo que $\lambda\leq
+1$. Evidentemente el denominador es mayor a cero, por lo que basta que su
+negación acote por debajo al numerador para que $\lambda > -1$. Este es el
+caso, pues únicamente difieren en el término $2\norm{v}_2^2$, el cual es
+positivo en el numerador. Así, $-1<\lambda\leq 1$ para $\lambda$ eigenvalor de
+un vector propio $v$ arbitrario de $T$, i.e. $\rho(T) \leq 1$.
+
+Así nuestro esquema es ameno a algoritmos de solución de sistemas lineales por
+ser diagonal dominante y positivo definido simétrico, así como convergente al
+refinar la malla por consistencia y estabilidad. Además, recordemos que
+Crank-Nicholson es incondicionalmente estable y de segundo orden en el tiempo y
+espacio.
+
+\end{document}

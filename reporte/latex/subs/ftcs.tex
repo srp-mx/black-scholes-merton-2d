@@ -1,0 +1,61 @@
+\documentclass[main.tex]{subfiles}
+\usepackage{util/estilo}
+
+\begin{document}
+
+El primer esquema a usar es FTCS. Partimos de sustituir las parciales con su
+discretización por Taylor hacia adelante en el tiempo y centrado en el espacio,
+de donde despejaremos $U_{i,j}^{n+1}$.
+\begin{multline}
+    \frac{U_{i,j}^{n+1} - U_{i,j}^n}{\Delta t} =\\
+    \alpha\pp{ \frac{U_{i+1,j}^n - 2U_{i,j}^n + U_{i-1,j}^n}{\Delta x^2} + \frac{U_{i,j+1}^n - 2U_{i,j}^n + U_{i,j-1}^n}{\Delta y^2}}
+\label{eq:ftcs0}
+\end{multline}
+
+Si $S_\mu = \frac{\alpha\Delta t}{\Delta \mu^2}$ y $S_{xy}=1-2S_x-2S_y$, entonces
+\begin{equation}
+    U_{i,j}^{n+1} = S_{xy}U_{i,j}^n + S_x\pp{U_{i+1,j}^n + U_{i-1,j}^n} + S_y\pp{U_{i,j+1}^n + U_{i,j-1}^n}
+\label{eq:ftcs1}
+\end{equation}
+
+Para comprender su estabilidad de Von Neumann, si $\ihat$ es la unidad
+imaginaria, proponemos soluciones independientes de la forma
+$$
+U_{i,j}^n = \xi^n e^{\ihat\pp{\theta i + \phi j}} \hspace{2mm};\hspace{2mm}\theta = p_x\Delta x \hspace{2mm};\hspace{2mm} \phi=p_y\Delta y
+$$
+
+Sustituyendo y dividiendo entre $\xi^ne^{\ihat(\theta i + \phi j)}$,
+\begin{equation}
+    \xi = S_{xy} + S_x \pp{e^{\ihat\theta}+e^{-\ihat\theta}} + S_y\pp{ e^{\ihat\phi} + e^{-\ihat\phi}}
+\label{eq:ftcs-stab1}
+\end{equation}
+
+Aplicando propiedades de complejos, tenemos
+\begin{equation}
+    \xi = S_{xy} + 2S_x\cos{\theta} + 2S_y\cos{\phi}
+\label{eq:ftcs-stab2}
+\end{equation}
+
+Expandiendo $S_{xy}$ y por propiedades trigonométricas tenemos
+\begin{equation}
+    \xi = 1 - 4S_x\sin^2\pp{\theta/2} - 4S_y\sin^2\pp{\phi/2}
+\label{eq:ftcs-stab3}
+\end{equation}
+
+Como $\theta$ y $\phi$ son libres al depender de $p_x$ y $p_y$, en el peor caso
+\begin{equation}
+    \xi = 1 - 4(S_x + S_y)
+\label{eq:ftcs-stab4}
+\end{equation}
+
+Como $S_\mu \geq 0$, la cota superior de $\xi\leq 1$ siempre se cumple, y la
+inferior de $-1\leq\xi$ si $-2 \leq -4(S_x+S_y)$. Por lo tanto la condición de
+estabilidad de Von Neumann del esquema es
+\begin{equation}
+    S_x + S_y = \alpha\Delta t\pp{\Delta x^{-2} + \Delta y^{-2}} \leq \frac{1}{2}
+\label{eq:ftcs-stab}
+\end{equation}
+
+\end{document}
+
+
