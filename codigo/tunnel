@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+ssh -L 8888:localhost:8888 "$@" docker logs -f bsm-cuda-jupyter

@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+docker run -d \
+    --name bsm-cuda-jupyter \
+    --gpus all \
+    -p 8888:8888 \
+    -v ./notebooks:/home/dev/notebooks \
+    bsm-cuda-jupyter:latest
