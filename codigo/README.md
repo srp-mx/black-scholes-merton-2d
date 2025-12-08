@@ -24,9 +24,9 @@ Si quieres crear un túnel de SSH para conectarte hacia otra máquina remota
 * Windows 10/11 con [WSL2 activo](https://learn.microsoft.com/en-us/windows/wsl/install)
 * GPU con capacidad de cómputo 6.1 o superior (Pascal o superior)
 * Driver de NVIDIA [(1)](https://www.nvidia.com/en-eu/software/nvidia-app/)
-  [(2)](https://www.nvidia.com/en-eu/drivers/) más actualizado, al menos 581
+  [(2)](https://www.nvidia.com/en-eu/drivers/) más actualizado, al menos 555
 * Distribución WSL2 Ubuntu 24.04 (recomendado, pero es posible usar otra)
-* [CUDA Toolkit 13.0.2](https://developer.nvidia.com/cuda-13-0-2-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=runfile_local)
+* [CUDA Toolkit 12.9.0](https://developer.nvidia.com/cuda-12-9-0-download-archive?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=runfile_local)
   o más nuevo, dentro de WSL2
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) en Windows con
     + Integración con WSL2 Ubuntu activa
@@ -42,20 +42,22 @@ Si quieres crear un túnel de SSH para conectarte hacia otra máquina remota
 
 Como se ejecuta en un contenedor, no es necesario tener Python ni su
 paquetería, el contenedor instala su propia versión del resto de software
-necesario de modo que no interactúe con el resto del sistema.
+necesario de modo que no interactúe con el resto del sistema y tenga siempre
+la misma versión de todo el software.
 
 #### 🐧 Linux (nativo)
 
 * Ubuntu 24.04 (u otra distribución con soporte)
 * GPU con capacidad de cómputo 6.1 o superior (Pascal o superior)
-* Driver de NVIDIA 581 o mayor
-* CUDA Toolkit 13.0.2 o superior
+* Driver de NVIDIA 555 o mayor
+* CUDA Toolkit 12.9.0 o superior
 * Docker Engine (CE) + CLI
 * NVIDIA Container Toolkit
 
 Como se ejecuta en un contenedor, no es necesario tener Python ni su
 paquetería, el contenedor instala su propia versión del resto de software
-necesario de modo que no interactúe con el resto del sistema.
+necesario de modo que no interactúe con el resto del sistema y tenga siempre
+la misma versión de todo el software.
 
 #### 🌐 Google Colab (no recomendado)
 
