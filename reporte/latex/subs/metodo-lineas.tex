@@ -54,12 +54,7 @@ cada fila un círculo con centro $c$ y radio $R$ tal que
 Así $\lambda\in[-4\alpha\pp{\Delta x^{-2}+\Delta y^{-2}},0]$ eigenvalor de $M$
 cualquiera. Esto nos dice que los eigenvectores son negativos y
 $|\lambda_{\max{}}| \leq 4\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}$, lo que nos
-indica que mientras más fina sea la malla, mas rígido es el sistema. Como la
-estabilidad requiere $\Delta t \leq \frac{2}{|\lambda_{\max{}}|}$, entonces
-\begin{equation}
-    \Delta t \leq \frac{1}{2\alpha\pp{\Delta x^{-2} + \Delta y^{-2}}}
-\label{eq:stiff-lin}
-\end{equation}
+indica que mientras más fina sea la malla, mas rígido es el sistema.
 
 Esto no nos da el radio de rigidez $|\lambda_{\max{}}|/|\lambda_{\min{}}|$,
 pero sí nos da idea de este comportamiento. En la ejecución de nuestro
